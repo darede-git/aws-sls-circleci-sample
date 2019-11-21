@@ -1,0 +1,44 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@0.1.17
+jobs:
+  build:
+    working_directory: ~/aws-sls-circleci-sample
+    docker:
+      - image: circleci/node:latest
+
+    steps:
+      - checkout
+      
+      - aws-cli/setup:
+          profile-name: devProfile
+      
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - dependencies-cache-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - dependencies-cache
+
+      - run:
+          name: Install Serverless CLI and dependencies
+          command: |
+            sudo npm i -g serverless
+            npm install
+
+      - run: 
+          name: Run tests with code coverage
+          command: npm test --coverage
+
+      - run:
+          name: Deploy application 
+          command: sls deploy -v
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-cache-{{ checksum "package.json" }}

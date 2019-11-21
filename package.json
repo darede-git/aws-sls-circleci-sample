@@ -1,0 +1,29 @@
+{
+  "name": "aws-sls-circleci-sample",
+  "version": "1.0.0",
+  "description": "Sample serverless app with tests using Circle CI",
+  "main": "handler.js",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "aws-sdk": "^2.575.0",
+    "jest": "^21.2.1"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "html",
+      "text"
+    ]
+  },
+  "author": "Evandro Franco",
+  "license": "MIT"
+}
